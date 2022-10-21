@@ -6,5 +6,10 @@ pipeline{
                 git branch: 'main', url: 'https://github.com/etahamad/demo-counter-app'
             }
         }
+        stage('UNIT Testing'){
+            steps{
+                sh 'mvn test'
+            }
+        }
     }
 }

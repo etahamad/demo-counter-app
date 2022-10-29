@@ -73,5 +73,16 @@ pipeline{
                 }
             }
         }
+        stage('Docker Push'){
+            steps{
+                script{
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-auth', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]){
+                        sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
+                        sh 'docker image push etahamad/$JOB_NAME:v1.$BUILD_ID'
+                        sh 'docker image push etahamad/$JOB_NAME:latest'
+                    }
+                }
+            }
+        }
     }
 }

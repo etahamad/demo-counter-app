@@ -41,6 +41,7 @@ pipeline{
             steps{
                 script{
                     pom = readMavenPom file: 'pom.xml'
+                    nexusRepo = pom.version.endsWith('-SNAPSHOT') ? 'DemoApplicationSNAPSHOT' : 'DemoApplicationRelease'
                     filesByGlob = findFiles(glob: "target/*.jar");
                     echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
                     artifactPath = filesByGlob[0].path;
@@ -58,7 +59,7 @@ pipeline{
                     nexusUrl: '165.227.147.128:8081',
                     nexusVersion: 'nexus3',
                     protocol: 'http',
-                    repository: 'DemoApplicationRelease',
+                    repository: nexusRepo,
                     version: pom.version
                 }
             }

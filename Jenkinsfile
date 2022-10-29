@@ -40,22 +40,26 @@ pipeline{
         stage('Upload Artifact to nexus'){
             steps{
                 script{
+                    pom = readMavenPom file: 'pom.xml'
+                    filesByGlob = findFiles(glob: "target/*.jar");
+                    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
+                    artifactPath = filesByGlob[0].path;
                     nexusArtifactUploader artifacts:
                     [
                         [
-                            artifactId: 'springboot',
+                            artifactId: pom.artifactId,
                             classifier: '',
-                            file: 'target/Uberjar',
-                            type: 'jar'
+                            file: artifactPath,
+                            type: 'jar',
                         ]
                     ],
                     credentialsId: 'nexus-auth',
-                    groupId: 'com.example',
+                    groupId: pom.groupId,
                     nexusUrl: '165.227.147.128:8081',
-                    nexusVersion: 'nexus2',
+                    nexusVersion: 'nexus3',
                     protocol: 'http',
                     repository: 'DemoApplicationRelease',
-                    version: '1.0.0'
+                    version: pom.version
                 }
             }
         }

@@ -5,6 +5,6 @@ RUN mvn install
 
 FROM openjdk:11
 WORKDIR /app
-COPY --from=build /app/target/*.jar /app/app.jar
+COPY --from=build /app/target/Uber.jar /app/
 EXPOSE 9090
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "Uber.jar"]
